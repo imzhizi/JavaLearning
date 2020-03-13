@@ -1,4 +1,4 @@
-package com.imzhizi.JavaLearning.语言基础;
+package com.imzhizi.javalearning.语言基础;
 
 import org.junit.Test;
 

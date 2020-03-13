@@ -1,4 +1,4 @@
-package com.imzhizi.JavaLearning.base;
+package com.imzhizi.javalearning.应用;
 
 
 import java.util.LinkedHashMap;

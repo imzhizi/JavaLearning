@@ -1,7 +1,7 @@
-package com.imzhizi.JavaLearning.语言基础;
+package com.imzhizi.javalearning.语言基础;
 
-import com.imzhizi.JavaLearning.base.Student1;
-import com.imzhizi.JavaLearning.base.Student2;
+import com.imzhizi.javalearning.base.Student;
+import com.imzhizi.javalearning.base.Teacher;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -35,8 +35,8 @@ public class 反射 {
 
     @Test
     public void testReflect() throws NoSuchFieldException, IllegalAccessException {
-        Student1 srcObject = new Student1("zhizi", "qwer1234", "male");
-        Student2 desObject = new Student2();
+        Student srcObject = new Student("zhizi", "qwer1234", "male");
+        Teacher desObject = new Teacher();
         异类反射浅拷贝(srcObject, desObject);
         System.out.println(srcObject);
         System.out.println(desObject);

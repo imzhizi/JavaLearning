@@ -1,10 +1,10 @@
-package com.imzhizi.JavaLearning.base;
+package com.imzhizi.javalearning.base;
 
 /**
  * created by zhizi
  * on 3/7/20 12:39
  */
-public class Student1 {
+public class Student {
     private String username;
     private String pwd;
     private String gender;
@@ -33,18 +33,18 @@ public class Student1 {
         this.gender = gender;
     }
 
-    public Student1(String username, String pwd, String gender) {
+    public Student(String username, String pwd, String gender) {
         this.username = username;
         this.pwd = pwd;
         this.gender = gender;
     }
 
-    public Student1() {
+    public Student() {
     }
 
     @Override
     public String toString() {
-        return "Student1{" +
+        return "Student{" +
                 "username='" + username + '\'' +
                 ", pwd='" + pwd + '\'' +
                 ", gender='" + gender + '\'' +
