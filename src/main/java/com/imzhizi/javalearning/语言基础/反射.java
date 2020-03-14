@@ -1,7 +1,5 @@
 package com.imzhizi.javalearning.语言基础;
 
-import com.imzhizi.javalearning.base.Student;
-import com.imzhizi.javalearning.base.Teacher;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -40,6 +38,88 @@ public class 反射 {
         异类反射浅拷贝(srcObject, desObject);
         System.out.println(srcObject);
         System.out.println(desObject);
+    }
+
+    static class Teacher {
+        private String username;
+        private Integer gender;
+        public static int count = 0;
+
+        public Teacher() {
+            count++;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
+
+        public Integer getGender() {
+            return gender;
+        }
+
+        public void setGender(Integer gender) {
+            this.gender = gender;
+        }
+
+        @Override
+        public String toString() {
+            return "Teacher{" +
+                    "username='" + username + '\'' +
+                    ", gender=" + gender +
+                    '}';
+        }
+    }
+
+    static class Student {
+        private String username;
+        private String pwd;
+        private String gender;
+
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
+
+        public String getPwd() {
+            return pwd;
+        }
+
+        public void setPwd(String pwd) {
+            this.pwd = pwd;
+        }
+
+        public String getGender() {
+            return gender;
+        }
+
+        public void setGender(String gender) {
+            this.gender = gender;
+        }
+
+        public Student(String username, String pwd, String gender) {
+            this.username = username;
+            this.pwd = pwd;
+            this.gender = gender;
+        }
+
+        public Student() {
+        }
+
+        @Override
+        public String toString() {
+            return "Student{" +
+                    "username='" + username + '\'' +
+                    ", pwd='" + pwd + '\'' +
+                    ", gender='" + gender + '\'' +
+                    '}';
+        }
     }
 
 }
