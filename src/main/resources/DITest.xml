@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean id="teacher" class="com.imzhizi.javalearning.spring.DITest.Teacher">
+        <constructor-arg ref="location"/>
+        <constructor-arg name="course">
+            <bean class="com.imzhizi.javalearning.spring.DITest.Course" p:name="数学"/>
+        </constructor-arg>
+        <property name="code" value="10021"/>
+        <property name="school" ref="school"/>
+        <property name="classes">
+            <set>
+                <bean name="ac1" class="com.imzhizi.javalearning.spring.DITest.AClass" p:code="11" p:count="55"/>
+                <ref bean="ac2"/>
+                <ref bean="ac3"/>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="location" class="com.imzhizi.javalearning.spring.DITest.Location">
+        <property name="city" value="河南省"/>
+        <property name="zipCode" value="450000"/>
+    </bean>
+
+    <bean id="school" class="com.imzhizi.javalearning.spring.DITest.School">
+        <property name="name" value="一中"/>
+        <property name="principal" value="张校长"/>
+    </bean>
+
+    <bean name="ac2" class="com.imzhizi.javalearning.spring.DITest.AClass" p:code="15" p:count="54"/>
+    <bean name="ac3" class="com.imzhizi.javalearning.spring.DITest.AClass" p:code="15" p:count="54"/>
+
+
+    <!--    <bean id="student" class="com.imzhizi.javalearning.spring.DITest.Student" autowire="byType"/>-->
+    <bean id="student" class="com.imzhizi.javalearning.spring.DITest.Student"/>
+
+    <bean id="direct" class="com.imzhizi.javalearning.spring.DITest.Directive"/>
+
+    <bean id="title" class="com.imzhizi.javalearning.spring.DITest.Title" p:level="2" p:name="主任"/>
+</beans>

@@ -1,5 +1,6 @@
-package com.imzhizi.javalearning.Spring;
+package com.imzhizi.javalearning.spring;
 
+import lombok.Data;
 import org.junit.Test;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
@@ -11,6 +12,8 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.util.Date;
 
 /**
@@ -18,10 +21,14 @@ import java.util.Date;
  * on 3/13/20 21:41
  */
 public class BeanTest {
+    /**
+     * 可以看到
+     * 无论是BeanFactory、还是 ApplicationContext
+     * 都是通过某种方式将bean加载到 context 对象中
+     * 然后在bean不同的生命周期阶段，都能执行一些自定义方法
+     */
     @Test
     public void BeanFactoryTest() {
-        // 可以看到
-        // 读取xml中的配置后能够直接初始化对象
         XmlBeanFactory factory = new XmlBeanFactory(new ClassPathResource("BeanTest.xml"));
 
         System.out.println("student");
@@ -50,9 +57,12 @@ public class BeanTest {
         AbstractApplicationContext context = new ClassPathXmlApplicationContext("BeanTest.xml");
         InitDisBean initDisBean = (InitDisBean) context.getBean("initDisBean");
         System.out.println(initDisBean);
+        WorkAbility work = (WorkAbility) context.getBean("teacher");
+        System.out.println(work);
         context.registerShutdownHook();
     }
 
+    @Data
     static class StuDetail extends BeanTest.Student {
         private Integer age;
         private Date date;
@@ -62,32 +72,9 @@ public class BeanTest {
             super();
             count++;
         }
-
-        public Integer getAge() {
-            return age;
-        }
-
-        public void setAge(Integer age) {
-            this.age = age;
-        }
-
-        public Date getDate() {
-            return date;
-        }
-
-        public void setDate(Date date) {
-            this.date = date;
-        }
-
-        @Override
-        public String toString() {
-            return "StuDetail{" +
-                    "age=" + age +
-                    ", date=" + date +
-                    '}';
-        }
     }
 
+    @Data
     static class Teacher implements WorkAbility {
         private String username;
         private Integer gender;
@@ -97,105 +84,36 @@ public class BeanTest {
             count++;
         }
 
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public Integer getGender() {
-            return gender;
-        }
-
-        public void setGender(Integer gender) {
-            this.gender = gender;
-        }
-
-        @Override
-        public String toString() {
-            return "Teacher{" +
-                    "username='" + username + '\'' +
-                    ", gender=" + gender +
-                    '}';
-        }
-
         @Override
         public String getWorkPlace() {
             return "school";
         }
+
+        @PostConstruct
+        public void work() {
+            System.out.println("我来上班了……");
+        }
+
+        @PreDestroy
+        public void done() {
+            System.out.println("下班了……");
+        }
     }
 
+    @Data
     static class Student {
         private String username;
         private String pwd;
         private String gender;
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public String getPwd() {
-            return pwd;
-        }
-
-        public void setPwd(String pwd) {
-            this.pwd = pwd;
-        }
-
-        public String getGender() {
-            return gender;
-        }
-
-        public void setGender(String gender) {
-            this.gender = gender;
-        }
-
-        public Student(String username, String pwd, String gender) {
-            this.username = username;
-            this.pwd = pwd;
-            this.gender = gender;
-        }
-
-        public Student() {
-        }
-
-        @Override
-        public String toString() {
-            return "Student{" +
-                    "username='" + username + '\'' +
-                    ", pwd='" + pwd + '\'' +
-                    ", gender='" + gender + '\'' +
-                    '}';
-        }
     }
 
     interface WorkAbility {
         String getWorkPlace();
     }
 
+    @Data
     static class InitDisBean implements InitializingBean, DisposableBean {
         private String name;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return "InitDisBean{" +
-                    "name='" + name + '\'' +
-                    '}';
-        }
 
         @Override
         public void afterPropertiesSet() throws Exception {

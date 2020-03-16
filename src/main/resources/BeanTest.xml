@@ -3,19 +3,19 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-    <bean id="student" class="com.imzhizi.javalearning.Spring.BeanTest.StuDetail" scope="prototype">
+    <bean id="student" class="com.imzhizi.javalearning.spring.BeanTest.StuDetail" scope="prototype">
         <property name="username" value="Hello World!"/>
         <property name="age" value="18"/>
     </bean>
 
-    <bean id="teacher" class="com.imzhizi.javalearning.Spring.BeanTest.Teacher">
+    <bean id="teacher" class="com.imzhizi.javalearning.spring.BeanTest.Teacher">
         <property name="username" value="Hello World!"/>
     </bean>
 
-    <bean id="initDisBean" class="com.imzhizi.javalearning.Spring.BeanTest.InitDisBean">
+    <bean id="initDisBean" class="com.imzhizi.javalearning.spring.BeanTest.InitDisBean">
         <property name="name" value="Hello World!"/>
     </bean>
 
-    <bean class="com.imzhizi.javalearning.Spring.BeanTest.Processor"/>
+    <bean class="com.imzhizi.javalearning.spring.BeanTest.Processor"/>
 
 </beans>

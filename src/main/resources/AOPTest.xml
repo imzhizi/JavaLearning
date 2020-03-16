@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-3.0.xsd ">
+
+    <aop:config>
+        <aop:aspect id="myAspect" ref="logging">
+            <aop:pointcut id="dailyService"
+                          expression="execution(* com.imzhizi.javalearning.spring.AOPTest.ExampleBean.*(..))"/>
+            <aop:before pointcut-ref="dailyService" method="beforeAdvice"/>
+            <aop:after pointcut-ref="dailyService" method="afterAdvice"/>
+            <aop:after-returning pointcut-ref="dailyService" returning="retVal" method="afterReturningAdvice"/>
+            <aop:after-throwing pointcut-ref="dailyService" throwing="ex" method="afterThrowingAdvice"/>
+        </aop:aspect>
+    </aop:config>
+
+    <bean id="egBean" class="com.imzhizi.javalearning.spring.AOPTest.ExampleBean" p:name="example" p:count="12"/>
+
+    <bean id="logging" class="com.imzhizi.javalearning.spring.AOPTest.Logging"/>
+</beans>
