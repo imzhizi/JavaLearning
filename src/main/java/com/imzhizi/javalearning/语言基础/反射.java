@@ -9,6 +9,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class 反射 {
+    @Test
+    public void testReflect() throws NoSuchFieldException, IllegalAccessException {
+        Student srcObject = new Student("zhizi", "qwer1234", "male");
+        Teacher desObject = new Teacher();
+        异类反射浅拷贝(srcObject, desObject);
+        System.out.println(srcObject);
+        System.out.println(desObject);
+    }
+
     public void 异类反射浅拷贝(Object srcObject, Object desObject) throws IllegalAccessException, NoSuchFieldException {
         Assert.assertNotNull("Source must not be null", srcObject);
         Assert.assertNotNull("Destination must not be null", desObject);
@@ -29,15 +38,6 @@ public class 反射 {
                 }
             }
         }
-    }
-
-    @Test
-    public void testReflect() throws NoSuchFieldException, IllegalAccessException {
-        Student srcObject = new Student("zhizi", "qwer1234", "male");
-        Teacher desObject = new Teacher();
-        异类反射浅拷贝(srcObject, desObject);
-        System.out.println(srcObject);
-        System.out.println(desObject);
     }
 
     static class Teacher {

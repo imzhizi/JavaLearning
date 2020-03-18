@@ -11,6 +11,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * on 3/16/20 16:56
  */
 public class AspectTest {
+    /**
+     * 快乐地使用注解
+     */
     @Test
     public void POJO切面测试() {
         ApplicationContext context =
