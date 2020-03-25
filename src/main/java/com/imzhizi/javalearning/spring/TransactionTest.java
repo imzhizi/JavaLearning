@@ -28,7 +28,7 @@ public class TransactionTest {
      * 通过AOP实现，定义好通知和切面，然后在方法执行异常时就会调用
      */
     @Test
-    public void 声明式事务(){
+    public void 声明式事务() {
         //<tx:advice id="txAdvice"  transaction-manager="transactionManager">
         //      <tx:attributes>
         //      <tx:method name="create"/>

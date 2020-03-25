@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class 反射 {
+public class s反射 {
     @Test
     public void testReflect() throws NoSuchFieldException, IllegalAccessException {
         Student srcObject = new Student("zhizi", "qwer1234", "male");

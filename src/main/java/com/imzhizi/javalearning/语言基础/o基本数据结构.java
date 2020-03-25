@@ -9,7 +9,7 @@ import java.util.*;
  * created by zhizi
  * on 3/7/20 16:02
  */
-public class 基本数据结构 {
+public class o基本数据结构 {
 
     /**
      * 通过 Arrays 创建 final list，无法修改
@@ -35,11 +35,9 @@ public class 基本数据结构 {
      * <p>
      * 如何扩容
      * 首先确认是否为空list，若为空可以直接扩充为默认长度
-     * 扩容会改变数组结构所以需要 modCount++
      * 然后通过 grow 方法完成扩容
      * 扩容后的长度 newCapacity = oldCapacity + (oldCapacity >> 1)，相当于原来容量的1.5倍
      * 最后进行数据迁移，过程也不复杂，创建长度为新容量的数组，然后将原来的数据拷贝进来即可
-     * <p>
      * 扩容中，方法间始终传递 minCapacity，minCapacity 为size+1
      * ensureCapacity(int minCapacity) grow(int minCapacity)
      * 若 newCapacity 过大、过小时，进行相应的边界处理
@@ -47,11 +45,13 @@ public class 基本数据结构 {
      * 对数组使用了 transient 标记，该标记意思是在对象序列化的时候会忽略该字段
      * 忽略的话如何做到序列化呢？有私有的 writeObject readObject 做更精细的控制
      * <p>
-     * modeCount？
-     * 每次 add、remove 数据时，都需要检查数组容量，避免溢出，还要 modCount++ 记录
-     * modeCount 是为了记录 list 结构改变次数，借以实现 fail-fast 机制(似乎用于并发控制)
+     * ### modeCount？
+     * 每次 add、remove 数据时，由于 list 结构发生了，都需要执行 modCount++
+     * modeCount 有什么用呢？首先 modCount 并不是一种并发控制，也就是不能保证线程安全
+     * modCount 实现的是一种 fail-fast 机制，也就是能够快速地获知错误已产生，结果已经不可预计，抛出异常
+     * 什么时候使用 modCount 呢？其实只在迭代操作的时候使用，每轮迭代开始前都先获取 modCount，在本轮操作结束后判断是否此时集合已经发生了变化
+     * 说是迭代操作，其实sort、addALL、replaceAll、iterator、forEach 等诸多方法都需要借助该机制
      * 具有函数 checkForComodification() 用于检查使用中 list 是否被改动过 (ArrayList.this.modCount != this.modCount)
-     * 如果不相等，说明 list 在其他线程中可能被修改，出现并发错误
      * <p>
      * 关于 subList，是如何实现的呢？
      * 当我们调用 list.subList(fromIndex, toIndex) 时，可以获取一个新的 list
@@ -107,7 +107,6 @@ public class 基本数据结构 {
         queue.add(1);
         queue.add(4);
         System.out.println(queue.peek());
-
     }
 
     /**

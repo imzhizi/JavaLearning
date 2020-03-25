@@ -4,7 +4,6 @@ import lombok.Data;
 import org.junit.Test;
 
 import java.lang.annotation.*;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,7 +13,7 @@ import java.lang.reflect.Method;
  * created by zhizi
  * on 3/18/20 16:11
  */
-public class 注解 {
+public class s注解 {
     /**
      * - 基本概念
      * DK 5 版本引入的一个新特性
@@ -56,7 +55,7 @@ public class 注解 {
      */
     @Test
     public void 从注解获取配置() throws Exception {
-        Claim claim = 注解.class.getMethod("执行对象方法").getAnnotation(Claim.class);
+        Claim claim = s注解.class.getMethod("执行对象方法").getAnnotation(Claim.class);
         String className = claim.className();
         String methodName = claim.methodName();
 
@@ -99,7 +98,7 @@ public class 注解 {
      */
     @Test
     public void 模仿Bean() throws InvocationTargetException, IllegalAccessException, InstantiationException, NoSuchMethodException {
-        Method[] methods = 注解.class.getMethods();
+        Method[] methods = s注解.class.getMethods();
         for (Method method : methods) {
             if (method.isAnnotationPresent(Melon.class)) {
                 Object object = method.invoke(this);

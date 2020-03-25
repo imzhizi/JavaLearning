@@ -20,3 +20,8 @@
 [ Spring DI ](https://github.com/imzhizi/java-learning/blob/master/src/main/java/com/imzhizi/javalearning/spring/DITest.java )
 
 [ Spring Event ](https://github.com/imzhizi/java-learning/blob/master/src/main/java/com/imzhizi/javalearning/spring/EventTest.java )
+
+## 笔记规范
+在方法名的上方使用注释记笔记，不同话题之间用三级标题 `回车+###` 标注
+
+特殊名词、变量、方法名，使用 `「」` 标注主要这样输入比较方便，我输入法启用了中文半角符号，但在IDEA无效
