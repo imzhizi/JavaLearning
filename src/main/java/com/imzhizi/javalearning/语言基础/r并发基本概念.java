@@ -8,9 +8,9 @@ import java.util.concurrent.*;
  * created by zhizi
  * on 3/24/20 20:37
  */
-public class s并发 {
+public class r并发基本概念 {
     /**
-     * 新建线程的三种方式
+     * ### 新建线程的三种方式
      * 通过继承Thread类，重写run方法
      * 通过实现 runnable 接口, 事实上Thread 也是实现了 runnable 接口, thread 的 run 方法也来自于 runnable
      * 通过实现callable接口, callable 强制要求返回值, 需要借助 ExecutorService 和 Future 包裹的异步结果
@@ -106,7 +106,7 @@ public class s并发 {
      * 其他线程可以调用该线程的interrupt()方法对其进行中断操作, 但这个中断似乎并不会带来真正的中断
      * 所以仅仅是改变了该线程中的一个值
      * 该线程可以调用 isInterrupted()来感知其他线程对其自身的中断操作, 感知到之后实际上还是自行了解
-     * 相对于武断的直接只结束进程, 这样才有机会去清理资源, 安排后事
+     * 相对于武断的直接只结束线程, 这样才有机会去清理资源, 安排后事
      * <p>
      * ### sleep/wait 遭遇 interrupt
      * 仅仅会抛出 InterruptedException 异常，但仍然会继续执行
@@ -234,15 +234,19 @@ public class s并发 {
     /**
      * yield 是一个静态方法，一旦执行，它会是当前线程让出CPU
      * 让出的CPU并不是代表当前线程不再运行，而是会进入下一轮竞争，让出的时间片只会分配给当前线程相同优先级的线程
+     * 所以 yield 可以想象成一个瞬间 sleep，sleep 之后迅速恢复，不同点在于 yield 出让的资源是有要求的，也就是优先级要求
      * <p>
      * ### 关于优先级
      * Java程序中，通过一个整型成员变量Priority来控制优先级，优先级的范围从1~10
      * 构建线程的时候可以通过**setPriority(int)**方法进行设置，默认优先级为5
      * 优先级高的线程相较于优先级低的线程优先获得处理器时间片
      * 在不同JVM以及操作系统上，线程规划策略是不同的，不能一概而论
+     * <p>
+     * ### note
+     * 代码的注释中提到，很少会有什么场合适合使用 yield，可能是 debug 时为了重现 bug
+     * 还可以用来编写并发控制相关的功能，所以在 java.util.concurrent.locks 中被使用
      */
     static class Yield {
-        // 这是一个无效demo
         public static void main(String[] args) {
             Thread thread1 = new Thread(() -> {
                 System.out.println("释放");
@@ -251,21 +255,11 @@ public class s并发 {
             });
 
             Thread thread2 = new Thread(() -> {
-                try {
-                    Thread.sleep(500);
-                    System.out.println("我能抢到吗");
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                System.out.println("我能抢到吗");
             });
 
             Thread thread3 = new Thread(() -> {
-                try {
-                    Thread.sleep(500);
-                    System.out.println("我优先级高呀");
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                System.out.println("我优先级高呀");
             });
             thread1.setPriority(8);
             thread2.setPriority(1);
@@ -282,7 +276,7 @@ public class s并发 {
      * 用户线程完全结束后就意味着整个系统的业务任务全部结束，系统就没有对象需要守护，当一个Java应用只有守护线程的时候，虚拟机就会自然退出
      * 所以把一个线程标记为守护线程意味着主线程结束时会随之结束，而不像用户线程继续执行
      */
-    static class 用户进程 {
+    static class 用户线程 {
         public static void main(String[] args) {
             new Thread(() -> {
                 try {
@@ -299,7 +293,7 @@ public class s并发 {
         }
     }
 
-    static class 守护进程 {
+    static class 守护线程 {
         public static void main(String[] args) throws InterruptedException {
             Thread thread = new Thread(() -> {
                 try {

@@ -117,12 +117,20 @@ public class BeanTest {
 
         @Override
         public void afterPropertiesSet() throws Exception {
-            System.out.println("start");
+            System.out.println("接口 start");
         }
 
         @Override
         public void destroy() throws Exception {
-            System.out.println("end");
+            System.out.println("接口 end");
+        }
+
+        public void init(){
+            System.out.println("配置 init");
+        }
+
+        public void des(){
+            System.out.println("配置 des");
         }
     }
 

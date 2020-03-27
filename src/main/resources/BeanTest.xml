@@ -9,10 +9,10 @@
     </bean>
 
     <bean id="teacher" class="com.imzhizi.javalearning.spring.BeanTest.Teacher">
-        <property name="username" value="Hello World!"/>
+        <property name="username" value="Hello Teacher!"/>
     </bean>
 
-    <bean id="initDisBean" class="com.imzhizi.javalearning.spring.BeanTest.InitDisBean">
+    <bean id="initDisBean" class="com.imzhizi.javalearning.spring.BeanTest.InitDisBean" init-method="init" destroy-method="des">
         <property name="name" value="Hello World!"/>
     </bean>
 

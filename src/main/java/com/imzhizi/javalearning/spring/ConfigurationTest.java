@@ -2,6 +2,8 @@ package com.imzhizi.javalearning.spring;
 
 import lombok.Data;
 import org.junit.Test;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -12,6 +14,7 @@ import org.springframework.context.annotation.Import;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.io.Serializable;
 
 /**
  * created by zhizi
@@ -71,9 +74,19 @@ public class ConfigurationTest {
     }
 
     @Data
-    static class School {
+    static class School implements InitializingBean, DisposableBean {
         private String name;
         private String principal;
+
+        @Override
+        public void afterPropertiesSet() throws Exception {
+            System.out.println("school start");
+        }
+
+        @Override
+        public void destroy() throws Exception {
+            System.out.println("school end");
+        }
 
         @PostConstruct
         public void before() {
