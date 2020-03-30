@@ -14,17 +14,20 @@ public class o高级数据结构 {
      * - HashMap<k,v>
      * 线程不安全，性能好，无序
      * 构成成分 table[]、size、threshold、loadFactor、modCount、capacity、TREEIFY_THRESHOLD
-     * ## Node
+     * <p>
+     * ### Node
      * 主要通过 table[] 来储存数据，table中的每个结点都是一个 Node<k,v>
      * Node 是一个内部类，包含 final-k，v, final-hash 和 next
      * 可见每一个 Node 对象都是一个链表结点，table[] 就是一个头结点数组
-     * ## 负载因子
+     * <p>
+     * ### 负载因子
      * loadFactor 用于判断 HashMap 是否需要 resize
      * 具体来说，loadFactor 表示当前 size 与 table[] 长度的比值，也就是当前数据桶的上座率
      * 一旦上座率超过了 loadFactor，意味着 table[] 中哈希冲突已经比较频繁，需要 resize
      * threshold 就是 capacity * loadFactor
      * modCount 主要用于 fail-fast 机制，之前已经讲过
-     * ## put 方法的实现
+     * <p>
+     * ### put 方法的实现
      * 1. 对 key 的 hashCode 执行 hash()，保证所有的 null 都存在 0 位，然后将 hashcode 和 hashcode 的低16位异或
      * return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
      * 设计者认为这种方法开销低，而且可以有效减少碰撞，但这样得到的仍然不是 table[] 中的 index
@@ -38,11 +41,14 @@ public class o高级数据结构 {
      * 如果是红黑树，则需要二分查找结点，存在则更新，不存在就需要新增结点
      * TreeNode 是 HashMap 的内部类，继承自 LinkedHashMap.Entry<k,v>，Entry<k,v> 继承自 Node<k,v>
      * 含有 final-k，v, final-hash、next、before、after、prev、parent、left、right、red，具体见 LinkedHashMap
-     * ## get
+     * <p>
+     * ### get
      * get 方法就没什么特别的了，跟 put 方法的查找过程类似
-     * ## 具体如何扩容、数据迁移
+     * <p>
+     * ### 具体如何扩容、数据迁移
      * HashMap 要求容量必须是2的幂，DEFAULT_INITIAL_CAPACITY = 16，扩容时 newCapacity = oldCapacity << 1
      * 确定好容量后，就要数据迁移
+     * <p>
      * ### 目的地坐标计算 - 理论上需要重新计算 index 才能得到新的 index，但这样性能太差
      * 根据 hash & oldCap == 0 判断数据放到原位置还是平移 oldCap 长度的位置，无论是否冲突均适用，为什么可以这样做？
      * 可以理解的是对象的 hash 是永远不会变的，int 型 所以 32 位，cap 又总是小于等于 32 位的，其实就是 1 后面跟 n 个 0
@@ -50,9 +56,11 @@ public class o高级数据结构 {
      * 碰巧 hash 在这一位为 1，相当于给原来的 index 左端加一位 1
      * 就意味着计算新的 index 时，newIndex = (newCap - 1) & hash =  (OldCap - 1) & OldCap
      * 也就是 index + oldCap，所以 hash & oldCap=1 平移至 newTab[index+oldCap]
+     * <p>
      * ### 迁移还涉及到另一个问题，就是链表的处理
      * 与 hashtable 不同，hashMap 迁移的目的地是确定的，留在原地或者平移至 newTab[index+oldCap]
      * 所以在处理链表时，hashMap 使用了两套头尾指针hi和lo，来进行链表的切割
+     * <p>
      * ## 其他常量
      * TREEIFY_THRESHOLD = 8
      * MAXIMUM_CAPACITY = 1 << 30
@@ -99,6 +107,7 @@ public class o高级数据结构 {
      * true 表示 accessOrder，使 LinkedHashMap 记录访问顺序
      * 含有 cacheSize - 在缓存中最多可以保存多少对象（实际使用时要考虑 loadFactor）
      * 需要使用 synchronized 方法来包裹方法，保证 LinkedHashMap 的线程安全
+     * <p>
      * ## 如何实现淘汰机制？
      * 一方面，HashMap 的 put 方法执行后会调用 afterNodeInsertion 方法
      * 这个方法在 HashMap 中为空，但在 LinkedHashMap 中被重写，执行后会检查 evict（是否执行淘汰机制）
@@ -137,11 +146,13 @@ public class o高级数据结构 {
      * initialCapacity 默认为 11，loadFactor 默认为 0.75
      * 同样使用了 modCount，使用 count 计算 usedEntry 的数量
      * Hashtable 的 key 和 value 都不允许为 null，而 HashMap 进行了特殊处理
+     * <p>
      * ## put 方法略有不同
      * 在发生冲突需要建立链表时，HashTable 会选择将新结点放在链表的首位
      * index 计算方法有所不同
      * 使用 (key.hashCode() & 0x7FFFFFFF) % tab.length 来计算 index
      * 这也是为什么不支持null的原因，因为null没有hashcode方法
+     * <p>
      * ## rehash
      * 新容量=旧容量 * 2 + 1, 自然也不会要求容量是 2 的幂
      * 如何进行数据迁移呢？逐个遍历节点，然后重新计算 index，将它转移到新位置
@@ -149,6 +160,7 @@ public class o高级数据结构 {
      * 这是就设计一个问题，在新位置碰撞了怎么办，为了防止碰撞，代码直接写
      * e.next=newMap[index];
      * newMap[index]=e
+     * <p>
      * ## 对比
      * HashTable 比较纯粹一些，HashMap 为了它的小弟们 —— HashSet、LinkedHashMap 做了许多支持
      */
@@ -169,9 +181,11 @@ public class o高级数据结构 {
      * 其中 root<K,V> 属于内部类，实现了 Map 中的内部接口 Entry<K,V>
      * Entry<K,V> 拥有 k、v、left、right、parent、color
      * comparator 定义了 TreeMap 如何维护数据的顺序
+     * <p>
      * ## 使用红黑树能够使树具有不错的平衡性
      * 在进行 get 时，执行二分查找，保持在 log(n) 水平
      * 在进行 put、remove 时，对树执行修改之外，还需要再平衡 fixAfterInsertion()、fixAfterDeletion()
+     * <p>
      * ## 如何保持有序呢？类似于中序遍历？
      * 在进行遍历的时候，使用 successor() 方法，这个方法能够对树进行中序遍历
      * 通过 getCeilingEntry(key) 可以获得最接近于 key 的对象
