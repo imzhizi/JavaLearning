@@ -63,7 +63,7 @@ public class BeanTest {
     }
 
     @Data
-    static class StuDetail extends BeanTest.Student {
+    static class StuDetail extends Student {
         private Integer age;
         private Date date;
         static int count = 0;

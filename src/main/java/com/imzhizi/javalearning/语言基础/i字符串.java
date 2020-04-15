@@ -131,7 +131,7 @@ public class i字符串 {
      * <p>
      * ### UTF-8 与 UTF-16
      * 根据维基, 对于一个码点, `UTF-16` 可以是4位, 6位
-     * 而`UTF-8`则为1到6位均有可能, 具体表示范围见维基
+     * 而`UTF-8`则为1到6个字节均有可能, 具体表示范围见维基
      * [ UTF-8的编码方式 - 维基百科，自由的百科全书 ](https://zh.wikipedia.org/wiki/UTF-8#UTF-8%E7%9A%84%E7%B7%A8%E7%A2%BC%E6%96%B9%E5%BC%8F)
      * [ Comparison of Unicode encodings - Wikipedia ](https://en.wikipedia.org/wiki/Comparison_of_Unicode_encodings#Eight-bit_environments)
      */
@@ -167,19 +167,23 @@ public class i字符串 {
 
     /**
      * ### 那么`UTF-16`和`UTF-8`哪个好呢?
-     * 并没有绝对的好坏，对于西文字符, 每个字符在`UTF-8`中仅需要 1 字节, 而在 `UTF-16`中则需要 4 字节
-     * 但对于中文而言, `UTF-8`比较浪费, 因为中文所处的区块在`UTF-8`中需要3个字节，而`UTF-16`2个字节直接就能表示,
+     * 并没有绝对的好坏，对于西文字符, 每个字符在`UTF-8`中仅需要 1 字节, 而在 `UTF-16`中则需要 2 字节
+     * 但对于中文而言, `UTF-8`比较浪费, 因为中文所处的区块在`UTF-8`中需要3个字节，而 `UTF-16` 2个字节直接就能表示,
      * 所以说，每存储一个中文字符，`UTF-8`都会浪费一个字节，执行以下代码可以看到
      * PS：还可以看到 UTF_16 都会用-2, -1做开始，应该是用来做编码识别
      */
     @Test
     public void encoding2() throws UnsupportedEncodingException {
-        System.out.println(Arrays.toString("b".getBytes(StandardCharsets.UTF_8)));
-        System.out.println(Arrays.toString("b".getBytes(StandardCharsets.UTF_16)));
+        System.out.println(Arrays.toString("bb".getBytes(StandardCharsets.UTF_8)));
+        System.out.println(Arrays.toString("bb".getBytes(StandardCharsets.UTF_16)));
 
         System.out.println(Arrays.toString("你是谁".getBytes(StandardCharsets.UTF_8)));
         System.out.println(Arrays.toString("你是谁".getBytes(StandardCharsets.UTF_16)));
         System.out.println(Arrays.toString("你是谁".getBytes("Unicode")));
+
+        System.out.println(Arrays.toString("䶵䶵䶵".getBytes(StandardCharsets.UTF_8)));
+        System.out.println(Arrays.toString("䶵䶵䶵".getBytes(StandardCharsets.UTF_16)));
+        System.out.println(Arrays.toString("䶵䶵䶵".getBytes("Unicode")));
 
         System.out.println(Arrays.toString("中文真的不一样呦".getBytes(StandardCharsets.UTF_8)));
         System.out.println(Arrays.toString("中文真的不一样呦".getBytes(StandardCharsets.UTF_16)));
@@ -201,7 +205,6 @@ public class i字符串 {
     @Test
     public void encoding4() {
         System.out.println("\uD835\uDf46");
-        System.out.println("\uD835\uDf46".length());
-        System.out.println("\uD835\uDf46\uD835\uDf46".toCharArray().length);
+        System.out.println("\uD835\uDf46".toCharArray().length);
     }
 }

@@ -23,7 +23,7 @@ public class o基本数据结构 {
 
     /**
      * 朴实的 ArrayList
-     * 线程不安全
+     * 线程不安全，支持空值
      * 继承自 AbstractList，实现了 List、RandomAccess 接口
      * <p>
      * 本身基于对象数组 elementData[]
@@ -31,11 +31,10 @@ public class o基本数据结构 {
      * 设有默认容量 DEFAULT_CAPACITY = 10
      * 设有最大容量 MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8
      * 设有静态变量 空数组、默认长度数组
-     * 如果构造时不传参，那么直接使用默认数组，如果构造时容量为0，那么直接食用空数组
+     * 如果构造时不传参，那么直接使用默认数组，如果构造时容量为0，那么直接使用空数组
      * <p>
-     * 如何扩容
-     * 首先确认是否为空list，若为空可以直接扩充为默认长度
-     * 然后通过 grow 方法完成扩容
+     * ### 如何扩容
+     * 通过 grow 方法完成扩容
      * 扩容后的长度 newCapacity = oldCapacity + (oldCapacity >> 1)，相当于原来容量的1.5倍
      * 最后进行数据迁移，过程也不复杂，创建长度为新容量的数组，然后将原来的数据拷贝进来即可
      * 扩容中，方法间始终传递 minCapacity，minCapacity 为size+1
@@ -43,15 +42,17 @@ public class o基本数据结构 {
      * 若 newCapacity 过大、过小时，进行相应的边界处理
      * <p>
      * 对数组使用了 transient 标记，该标记意思是在对象序列化的时候会忽略该字段
-     * 忽略的话如何做到序列化呢？有私有的 writeObject readObject 做更精细的控制
+     * 为什么要忽略呢？因为重写了 writeObject readObject 方法，提供了更精细的私有实现
      * <p>
      * ### modeCount？
-     * 每次 add、remove 数据时，由于 list 结构发生了，都需要执行 modCount++
-     * modeCount 有什么用呢？首先 modCount 并不是一种并发控制，也就是不能保证线程安全
-     * modCount 实现的是一种 fail-fast 机制，也就是能够快速地获知错误已产生，结果已经不可预计，抛出异常
-     * 什么时候使用 modCount 呢？其实只在迭代操作的时候使用，每轮迭代开始前都先获取 modCount，在本轮操作结束后判断是否此时集合已经发生了变化
+     * 每次 add、remove 数据时，即 list 结构发生变化时，都需要执行 modCount++
+     * modeCount 有什么用呢？
+     * 首先 modCount 并不是一种并发控制，也就是不能保证线程安全
+     * modCount 实现的是 fail-fast 机制，能够快速地获知错误已产生，结果已经不可预计，抛出异常
+     * 什么时候使用 modCount 呢？
+     * 主要是在执行迭代操作的时候使用，每轮迭代开始前都先获取 modCount，在本轮操作结束后判断此时集合结构是否发生了变化 - checkForComodification()
      * 说是迭代操作，其实sort、addALL、replaceAll、iterator、forEach 等诸多方法都需要借助该机制
-     * 具有函数 checkForComodification() 用于检查使用中 list 是否被改动过 (ArrayList.this.modCount != this.modCount)
+     * 方法 checkForComodification() 用于检查使用中 list 是否被改动过 (ArrayList.this.modCount != this.modCount)
      * <p>
      * 关于 subList，是如何实现的呢？
      * 当我们调用 list.subList(fromIndex, toIndex) 时，可以获取一个新的 list
@@ -111,10 +112,8 @@ public class o基本数据结构 {
 
     /**
      * 双向队列 ArrayDeque
-     * 其实 LinkedList 也是 Deque 的一个实现
-     * 但还有另外一个实现就是 ArrayDeque
+     * 其实 LinkedList 也是 Deque 的一个实现，另外一个实现就是 ArrayDeque
      * 线程不安全，不允许插入空值
-     * 基于数组实现了无容量限制，自动扩容
      * 继承自 AbstractCollection，实现了 Deque
      * AbstractCollection 实现了 Collection，对于很多方法都有默认的实现
      * <p>

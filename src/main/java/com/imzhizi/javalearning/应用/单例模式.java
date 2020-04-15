@@ -22,9 +22,18 @@ public class 单例模式 {
     }
 
     /**
-     * 双重校验锁
+     * 双重检查+锁
      * 按需加载，通过为类对象加锁保证类变量的线程安全
-     * 使用volatile保证instance是在new之后才使用
+     * 为什么需要双重检查
+     * 检查1：如果instance已经被实例化，那么就不需要加锁，直接返回，如果未创建则创建
+     * 检查2：synchronized 可能被调用多次，再次检查保证只被实例化一次
+     * synchronized 和 volatile 的作用
+     * synchronized 保证只有一个线程在实例化类变量，类变量被实例化只后才可以读取
+     * 因为存在一个致命缺陷
+     * 因指令重排而造成未被初始化成功的对象逸出
+     * 具体来说，对象的创建：分配内存(地址已经存在了)、设置零值、设置对象头、构造函数，然后将地址返回给变量名
+     * 但经过指令重排，线程A可能还没有完成对象的初始化就已经被线程B调用了
+     * 所以需要 volatile 来避免指令重排，确保初始化未完成之前变量名都是null
      */
     static class SyncedSingleton {
         private volatile static SyncedSingleton instance;
@@ -47,7 +56,6 @@ public class 单例模式 {
             System.out.println("doSomething");
         }
     }
-
 
     /**
      * 静态内部类
