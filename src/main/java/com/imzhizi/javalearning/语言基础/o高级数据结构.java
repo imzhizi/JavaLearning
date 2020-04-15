@@ -11,7 +11,7 @@ import java.util.*;
  */
 public class o高级数据结构 {
     /**
-     * - HashMap<k,v>
+     * HashMap<k,v>
      * 线程不安全，性能好，无序
      * 构成成分 table[]、size、threshold、loadFactor、modCount、capacity、TREEIFY_THRESHOLD
      * <p>
@@ -28,16 +28,16 @@ public class o高级数据结构 {
      * modCount 主要用于 fail-fast 机制，之前已经讲过
      * <p>
      * ### put 方法的实现
-     * 1. 对 key 的 hashCode 执行 hash()，保证所有的 null 都存在 0 位，然后将 hashcode 和 hashcode 的低16位异或
+     * 1. 对 key 的 hashCode 执行 hash()，保证所有的 null 都存在 0 位，然后将 hashcode 和 hashcode 的高16位异或
      * return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
      * 设计者认为这种方法开销低，而且可以有效减少碰撞，但这样得到的仍然不是 table[] 中的 index
-     * 2. index = (capacity - 1) & hash，也就是将容量和 hash 做按位与操作，保证不会溢出的同时获得一个 index
+     * index = (capacity - 1) & hash，也就是将容量和 hash 做按位与操作，保证不会溢出的同时获得一个 index
      * 3. 根据 table[index] 的情况，存在几种情况
      * 如果 table[index] 为空，那么直接 newNode 即可，如果不为空，意味着更新结点/冲突
      * 如果 table[index] equals key，说明是要更新结点，直接改变 table[index] 的 value 即可
      * 如果 table[index] not equals key，说明是冲突了，就要在该结点的后续链表中查找需要更新结点还是新增结点
      * 接下来需要判断 table[index] 的类型，是 TreeNode 还是 Node，TreeNode 意味着是红黑树，Node 则意味着是链表
-     * 如果是链表，就要逐个 equals 查找结点，存在则更新，不存在就需要新增结点，如果结点数量大于 TREEIFY_THRESHOLD，就要执行 treeifyBin() 转化为红黑树
+     * 如果是链表，就要逐个 equals 查找结点，存在则更新，不存在就需要新增结点，如果结点数量大于 8，就要执行 treeifyBin() 转化为红黑树
      * 如果是红黑树，则需要二分查找结点，存在则更新，不存在就需要新增结点
      * TreeNode 是 HashMap 的内部类，继承自 LinkedHashMap.Entry<k,v>，Entry<k,v> 继承自 Node<k,v>
      * 含有 final-k，v, final-hash、next、before、after、prev、parent、left、right、red，具体见 LinkedHashMap
