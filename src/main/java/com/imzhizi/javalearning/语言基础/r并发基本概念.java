@@ -3,6 +3,8 @@ package com.imzhizi.javalearning.语言基础;
 import org.junit.Test;
 
 import java.util.concurrent.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * created by zhizi
@@ -313,4 +315,75 @@ public class r并发基本概念 {
         }
     }
 
+
+    @Test
+    public void test() throws InterruptedException {
+        Thread t = new Thread(() -> {
+            try {
+                for (int i = 0; i < 3; i++) {
+                    System.out.println("aaaa");
+                    try {
+                        try {
+                            Thread.currentThread().interrupt();
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            throw e;
+                        }
+                    } finally {
+                        System.out.println("接受异常的异常");
+                    }
+                    System.out.println("eeee");
+                }
+            } catch (Exception e) {
+                System.out.println("end");
+                e.printStackTrace();
+            }
+        });
+
+        t.start();
+        Thread.sleep(5000);
+    }
+
+
+    @Test
+    public void Interrupt() throws InterruptedException {
+        BlockingQueue<Integer> queue = new ArrayBlockingQueue<>(10);
+
+        Thread t = new Thread(() -> {
+            try {
+                Thread.currentThread().interrupt();
+                int x = queue.take();
+                System.out.println(x);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                System.out.println("成功嗝屁");
+            }
+        });
+
+        t.start();
+        Thread.sleep(1000);
+    }
+
+    /**
+     * 线程位于sleep中，无论何时都会响应 InterruptedException
+     */
+    @Test
+    public void Interrupt2() throws InterruptedException {
+        Thread t = new Thread(() -> {
+            try {
+                System.out.println("i, ok");
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                System.out.println("成功嗝屁");
+            }
+        });
+
+        t.start();
+        Thread.sleep(2000);
+        t.interrupt();
+        Thread.sleep(4000);
+    }
 }

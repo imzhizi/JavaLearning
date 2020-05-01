@@ -1,4 +1,4 @@
-package com.imzhizi.javalearning.语言基础;
+package com.imzhizi.javalearning.应用.多线程;
 
 import org.junit.Test;
 

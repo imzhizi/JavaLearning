@@ -3,6 +3,8 @@ package com.imzhizi.javalearning.语言基础;
 import lombok.Data;
 import org.junit.Test;
 
+import java.sql.DriverManager;
+
 /**
  * created by zhizi
  * on 3/25/20 09:12
@@ -15,7 +17,16 @@ public class a接口 {
     }
 
     interface Say {
+        String words="ss";
         void func();
+    }
+
+    class SSS implements Say{
+
+        @Override
+        public void func() {
+
+        }
     }
 
     @Data

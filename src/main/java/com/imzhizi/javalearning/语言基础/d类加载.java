@@ -22,6 +22,7 @@ public class d类加载 {
     static class Son extends Parent {
         static int ss = 234;
         static final int css = 234;
+        static Init init;
 
         static {
             System.out.println("i'm dd");
@@ -32,8 +33,8 @@ public class d类加载 {
     @Test
     public void test() {
         // 两者都触发
-        // Son son = new Son();
-//        System.out.println(Son.ss);
+        Son son = new Son();
+        System.out.println(Son.ss);
 
         // 仅触发父类
         // System.out.println(Son.pp);

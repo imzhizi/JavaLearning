@@ -37,6 +37,11 @@ public class l异常类 {
                     }).start();
                 } else {
                     new Thread(() -> {
+                        try {
+                            throw new MyException2("也不是IO异常");
+                        } catch (MyException2 myException2) {
+                            myException2.printStackTrace();
+                        }
                         System.out.println("咱没事");
                     }).start();
                 }
@@ -46,6 +51,12 @@ public class l异常类 {
 
     static class MyException extends RuntimeException {
         public MyException(String message) {
+            super(message);
+        }
+    }
+
+    static class MyException2 extends Exception {
+        public MyException2(String message) {
             super(message);
         }
     }

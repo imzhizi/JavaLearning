@@ -30,7 +30,9 @@ public class o高级数据结构 {
      * ### put 方法的实现
      * 1. 对 key 的 hashCode 执行 hash()，保证所有的 null 都存在 0 位，然后将 hashcode 和 hashcode 的高16位异或
      * return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
-     * 设计者认为这种方法开销低，而且可以有效减少碰撞，但这样得到的仍然不是 table[] 中的 index
+     * -> 设计者认为这种方法开销低，而且可以有效减少碰撞，但这样得到的仍然不是 table[] 中的 index
+     * -> 开销低可以理解，减少碰撞呢？hashcode，他们有几种来源自增序列，随机数，内存地址
+     * -> 其中数值型的hashcode都是从高位开始，低位全是0，这时候如果直接使用hashcode和长度做与，冲突会非常多
      * index = (capacity - 1) & hash，也就是将容量和 hash 做按位与操作，保证不会溢出的同时获得一个 index
      * 3. 根据 table[index] 的情况，存在几种情况
      * 如果 table[index] 为空，那么直接 newNode 即可，如果不为空，意味着更新结点/冲突
@@ -73,6 +75,8 @@ public class o高级数据结构 {
         for (int i = 0; i < 32; i++) {
             hashMap.put(i, i + 1);
         }
+        System.out.println(hashMap.get(0));
+        System.out.println(hashMap.remove(0));
         System.out.println(hashMap);
     }
 

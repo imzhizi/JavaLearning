@@ -1,6 +1,7 @@
-package com.imzhizi.javalearning.应用;
+package com.imzhizi.javalearning.应用.多线程;
 
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.LockSupport;
@@ -12,11 +13,10 @@ import java.util.concurrent.locks.ReentrantLock;
  * [华为和阿里都考过的多线程编程题，你会吗？多线程交替打印 ABC的多种实现方法 - 个人文章 - SegmentFault 思否](https://segmentfault.com/a/1190000021433079 )
  */
 public class 三线程ABC {
-
     /**
      * 基于轮询，个人测试没发现问题，不知道是否符合要求
      */
-    static class 轮询 {
+    static class Volatile轮询 {
         private volatile static int last = 3;
 
         public static void main(String[] args) {
@@ -50,6 +50,43 @@ public class 三线程ABC {
                         last = 3;
                         i++;
                     }
+                }
+            }).start();
+        }
+    }
+
+    static class 原子类 {
+        private static final AtomicInteger val = new AtomicInteger(1);
+
+        public static void main(String[] args) {
+            new Thread(() -> {
+                int i = 0;
+                while (i < 100) {
+                    while (val.get() != 1) ;
+                    System.out.print('A');
+                    val.set(2);
+                    i++;
+
+                }
+            }).start();
+
+            new Thread(() -> {
+                int i = 0;
+                while (i < 100) {
+                    while (val.get() != 2) ;
+                    System.out.print('B');
+                    val.set(3);
+                    i++;
+                }
+            }).start();
+
+            new Thread(() -> {
+                int i = 0;
+                while (i < 100) {
+                    while (val.get() != 3) ;
+                    System.out.print('C');
+                    val.set(1);
+                    i++;
                 }
             }).start();
         }
@@ -286,6 +323,93 @@ public class 三线程ABC {
                     }
                 }
             }, "C").start();
+        }
+    }
+
+    /**
+     * 错误示范
+     */
+
+    /**
+     * 最大的问题在于如果值没有及时写回主存会导致死循环
+     * 不使用赋值形式会让问题暴露的更明显
+     * 内存的写入读取都非常随机
+     */
+    static class 无操作 {
+        private static int val = 3;
+
+        public static void main(String[] args) {
+            new Thread(() -> {
+                int i = 0;
+                while (i < 100) {
+                    while (val % 3 == 1) ;
+                    System.out.print('A');
+                    val++;
+                    i++;
+
+                }
+            }).start();
+
+            new Thread(() -> {
+                int i = 0;
+                while (i < 100) {
+                    while (val % 3 == 2) ;
+                    System.out.print('B');
+                    val++;
+                    i++;
+                }
+            }).start();
+
+            new Thread(() -> {
+                int i = 0;
+                while (i < 100) {
+                    while (val % 3 == 0) ;
+                    System.out.print('C');
+                    val++;
+                    i++;
+                }
+            }).start();
+        }
+    }
+
+    /**
+     * volatile 错误示范，使用了 ++ 操作，因为 ++ 操作不是原子操作
+     * 这也展现了volatile不能保证原子性的特点
+     */
+    static class Volatile {
+        private volatile static int val = 1;
+
+        public static void main(String[] args) {
+            new Thread(() -> {
+                int i = 0;
+                while (i < 100) {
+                    while (val % 3 == 1) ;
+                    System.out.print('A');
+                    val++;
+                    i++;
+
+                }
+            }).start();
+
+            new Thread(() -> {
+                int i = 0;
+                while (i < 100) {
+                    while (val % 3 == 2) ;
+                    System.out.print('B');
+                    val++;
+                    i++;
+                }
+            }).start();
+
+            new Thread(() -> {
+                int i = 0;
+                while (i < 100) {
+                    while (val % 3 == 0) ;
+                    System.out.print('C');
+                    val++;
+                    i++;
+                }
+            }).start();
         }
     }
 }
