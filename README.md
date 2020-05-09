@@ -28,7 +28,7 @@
 ### 并发组件
 为了实现对多线程更好地控制, Java 提供了一系列API, 尤其是以AQS为基础的ReentrantLock、Condition、CountDownLatch、CyclicBarrier、Semaphore, 满足了不同场景下的锁需求.
 
-同时我画了几张关于它们的流程图
+同时我画了几张关于它们的流程图, [ 不过需要保存下来自行用浏览器打开 ](https://github.com/imzhizi/java-learning/blob/master/Java%E5%B9%B6%E5%8F%91%E7%BB%84%E4%BB%B6.html )
 
 
 ### 编译期注解与Lombok
