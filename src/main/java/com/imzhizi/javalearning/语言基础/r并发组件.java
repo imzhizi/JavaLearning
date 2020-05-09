@@ -2,8 +2,7 @@ package com.imzhizi.javalearning.语言基础;
 
 import org.junit.Test;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.*;
 import java.util.concurrent.locks.*;
 
 /**
@@ -49,9 +48,10 @@ public class r并发组件 {
                     Thread.sleep(10000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                } finally {
+                    System.out.println("睡醒了");
+                    lock.unlock();
                 }
-                System.out.println("睡醒了");
-                lock.unlock();
             });
             t.start();
         }
@@ -62,7 +62,7 @@ public class r并发组件 {
      * 如果多个线程都存在于同步队列中，即便尝试 unpark 后面的线程
      * 也只是会再次判断自己能否获取锁，然后再次park
      */
-    static class 公平独占锁 {
+    static class 公平独占重入锁 {
         private static final Lock lock = new ReentrantLock(true);
 
         public static void main(String[] args) {
@@ -125,11 +125,21 @@ public class r并发组件 {
         }
     }
 
+    /**
+     * 在AQS 中，ConditionObject implements Condition
+     */
+    @Test
+    public void 条件队列() throws InterruptedException {
+        Lock lock = new ReentrantLock();
+        Condition condition = lock.newCondition();
+        condition.await();
+        condition.signal();
+    }
 
     /**
-     * 共享锁的获取与释放
+     * 基于重入锁的读写锁 - 共享锁
      */
-    static class 共享锁 {
+    static class 重入读写锁 {
         private static final ReadWriteLock lock = new ReentrantReadWriteLock();
         private static volatile String msg = "null";
 
@@ -163,32 +173,45 @@ public class r并发组件 {
 
 
     /**
-     * CountDownLatch 的思路似乎是直接park自身，知道有人将初始值改为0
-     * 这个时候才唤醒当初park的线程
+     * CountDownLatch 的思路是 await() 时如果同步变量不为0就阻塞自身，而同步变量减到0会唤醒所有被阻塞的线程
+     * 简单的设想是在 countDown() 将同步变量缩减为0时唤醒阻塞队列中的所有结点
+     * 实际上并没有那么简单，首先latch基于AQS的共享锁实现，所以线程的唤醒也基于共享锁的唤醒
+     * AQS如何唤醒共享锁呢——使用了一种名为「调用风暴」的机制
      */
-    static class 其他锁 {
-        private static final CountDownLatch sharedLock = new CountDownLatch(3);
+    static class 倒数锁 {
+        private static final CountDownLatch latch = new CountDownLatch(3);
 
         public static void main(String[] args) {
             new Thread(() -> {
                 try {
-                    sharedLock.await();
+                    latch.await();
                     System.out.println("time to me?");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
             }).start();
 
             for (int i = 0; i < 6; i++) {
                 int finalI = i;
                 new Thread(() -> {
-                    sharedLock.countDown();
-                    System.out.println(finalI + " is reading, " + sharedLock.getCount() + " is waiting");
+                    latch.countDown();
+                    System.out.println(finalI + " is reading, " + latch.getCount() + " is waiting");
                 }).start();
-
             }
         }
+    }
+
+    @Test
+    public void 循环栅栏() throws BrokenBarrierException, InterruptedException {
+        CyclicBarrier barrier = new CyclicBarrier(6);
+        barrier.await();
+    }
+
+    @Test
+    public void 信号量() throws InterruptedException {
+        Semaphore semaphore = new Semaphore(2);
+        semaphore.acquire();
+        semaphore.release();
     }
 
     /**
@@ -207,19 +230,16 @@ public class r并发组件 {
      * Node 的数据结构 hash、key、val、next
      * ForwardingNode 继承自Node，是执行扩容操作时被插在桶的头部的结点
      * 增加了一个成员变量 nextTable(Node[])
-     *
+     * <p>
      * resizeStamp
-     *
+     * <p>
      * index 的计算方法为 hash&(n-1)，hash = h^(h>>>16) & 0x7fffffff
      * 这个 0x7fffffff 有什么用之后才能看到
-     *
+     * <p>
      * 扩容方法是 transfer
-     *
      */
     @Test
     public void 并发哈希表() {
         ConcurrentHashMap<String, String> map = new ConcurrentHashMap<>();
-        System.out.println(Integer.numberOfLeadingZeros(16));
-        System.out.println(32768|16);
     }
 }
