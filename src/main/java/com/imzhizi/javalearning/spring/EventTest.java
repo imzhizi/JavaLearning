@@ -7,6 +7,8 @@ import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.context.event.ContextStartedEvent;
 import org.springframework.context.event.ContextStoppedEvent;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
 
 /**
  * created by zhizi
@@ -19,8 +21,8 @@ public class EventTest {
      */
     @Test
     public void 事件处理器测试() {
-        ConfigurableApplicationContext context =
-                new ClassPathXmlApplicationContext("EventTest.xml");
+        GenericApplicationContext context =
+                new GenericXmlApplicationContext("EventTest.xml");
         context.start();
         EGBean egBean = (EGBean) context.getBean("egBean");
         System.out.println(egBean);
@@ -64,7 +66,7 @@ public class EventTest {
      */
     @Test
     public void 自定义事件测试() {
-        ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("EventTest.xml");
+        GenericApplicationContext context = new GenericXmlApplicationContext("EventTest.xml");
         CustomEventPublisher cvp = (CustomEventPublisher) context.getBean("customEventPublisher");
         cvp.publish();
         cvp.publish();

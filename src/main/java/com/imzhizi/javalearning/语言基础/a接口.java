@@ -3,8 +3,6 @@ package com.imzhizi.javalearning.语言基础;
 import lombok.Data;
 import org.junit.Test;
 
-import java.sql.DriverManager;
-
 /**
  * created by zhizi
  * on 3/25/20 09:12

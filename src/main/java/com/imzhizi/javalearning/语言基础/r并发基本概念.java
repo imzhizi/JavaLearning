@@ -3,8 +3,6 @@ package com.imzhizi.javalearning.语言基础;
 import org.junit.Test;
 
 import java.util.concurrent.*;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * created by zhizi

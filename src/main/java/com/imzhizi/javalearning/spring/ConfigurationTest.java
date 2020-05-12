@@ -11,6 +11,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.support.GenericApplicationContext;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -32,7 +33,7 @@ public class ConfigurationTest {
      */
     @Test
     public void test() {
-        ConfigurableApplicationContext ctx =
+        GenericApplicationContext ctx =
                 new AnnotationConfigApplicationContext(EGBeanConfigA.class);
         Student student = ctx.getBean(Student.class);
         System.out.println(student);

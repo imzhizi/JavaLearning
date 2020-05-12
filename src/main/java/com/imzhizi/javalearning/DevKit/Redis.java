@@ -18,7 +18,7 @@ import java.time.LocalDate;
  * created by zhizi
  * on 4/22/20 20:56
  */
-public class 内存数据库 {
+public class Redis {
 
     @Data
     static class Order implements Serializable {

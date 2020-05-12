@@ -1,4 +1,4 @@
-package com.imzhizi.javalearning.应用.多线程;
+package com.imzhizi.javalearning.语言基础;
 
 import org.junit.Test;
 
@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
  * created by zhizi
  * on 4/19/20 10:38
  */
-public class 线程池 {
+public class r线程池 {
     /**
      * 可以很直观地看到，
      * 有5个线程(CORE_POOL_SIZE)在执行任务，执行之后接下来的5个任务依然是这5个线程，因为线程ID没有变化

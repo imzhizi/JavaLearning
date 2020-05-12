@@ -6,11 +6,10 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.beans.factory.xml.XmlBeanFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
+import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -22,6 +21,16 @@ import java.util.Date;
  */
 public class BeanTest {
     /**
+     * 总的来看，在 {@link GenericApplicationContext }之下
+     * 包含了 {@link GenericXmlApplicationContext } 和 {@link org.springframework.context.annotation.AnnotationConfigApplicationContext } 两个子类
+     * 一个用于传统的XML格式的容器初始化，一个则应对注解式的容器初始化
+     * 其中 GenericXmlApplicationContext 使用 XmlBeanDefinitionReader 完成 XML 解析
+     * 而 AnnotationConfigApplicationContext 则依靠 AnnotatedBeanDefinitionReader 完成 class.config 的解析
+     *
+     */
+
+
+    /**
      * 可以看到
      * 无论是BeanFactory、还是 ApplicationContext
      * 都是通过某种方式将bean加载到 context 对象中
@@ -29,7 +38,9 @@ public class BeanTest {
      */
     @Test
     public void BeanFactoryTest() {
-        XmlBeanFactory factory = new XmlBeanFactory(new ClassPathResource("BeanTest.xml"));
+        DefaultListableBeanFactory factory = new DefaultListableBeanFactory();
+        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(factory);
+        reader.loadBeanDefinitions("BeanTest.xml");
 
         System.out.println("student");
         System.out.println(factory.getBean("student"));
@@ -47,14 +58,14 @@ public class BeanTest {
 
     @Test
     public void FXAppContextTest() {
-        ApplicationContext context = new ClassPathXmlApplicationContext("BeanTest.xml");
+        GenericApplicationContext context = new GenericXmlApplicationContext("BeanTest.xml");
         WorkAbility work = (WorkAbility) context.getBean("teacher");
         System.out.println(work.getWorkPlace());
     }
 
     @Test
     public void Bean的初始化和销毁() {
-        AbstractApplicationContext context = new ClassPathXmlApplicationContext("BeanTest.xml");
+        GenericApplicationContext context = new GenericXmlApplicationContext("BeanTest.xml");
         InitDisBean initDisBean = (InitDisBean) context.getBean("initDisBean");
         System.out.println(initDisBean);
         WorkAbility work = (WorkAbility) context.getBean("teacher");
@@ -125,11 +136,11 @@ public class BeanTest {
             System.out.println("接口 end");
         }
 
-        public void init(){
+        public void init() {
             System.out.println("配置 init");
         }
 
-        public void des(){
+        public void des() {
             System.out.println("配置 des");
         }
     }

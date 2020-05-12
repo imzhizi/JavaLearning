@@ -4,8 +4,8 @@ import lombok.Data;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
 
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
@@ -22,7 +22,7 @@ public class DITest {
      */
     @Test
     public void IOCTest() {
-        ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("DITest.xml");
+        GenericApplicationContext context = new GenericXmlApplicationContext("DITest.xml");
         Teacher teacher = (Teacher) context.getBean("teacher");
         System.out.println(teacher);
         Student student = (Student) context.getBean("student");
